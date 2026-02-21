@@ -1,0 +1,18 @@
+server:
+  http_port: 8080
+  tcp_port: 9000
+
+database:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: root
+  dbname: game_server
+  charset: utf8mb4
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  db: 0
