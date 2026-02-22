@@ -1,18 +1,20 @@
 # 五子棋游戏服务器
 
-一个基于 Go 语言开发的五子棋在线对战游戏服务器，支持 TCP 长连接、用户认证、房间匹配、实时对战和排行榜功能。
+一个基于 Go 语言开发的五子棋在线对战游戏服务器，支持 TCP 长连接、WebSocket、用户认证、房间匹配、实时对战和排行榜功能，并提供 Web 可视化界面。
 
 ## 技术栈
 
 - **语言**: Go 1.21+
 - **数据库**: MySQL 8.0
 - **缓存**: Redis 7.0
-- **网络协议**: HTTP + TCP 长连接
+- **网络协议**: HTTP + TCP 长连接 + WebSocket
+- **前端**: 原生 HTML/CSS/JavaScript
 
 ## 功能特性
 
 - 用户注册/登录 (HTTP API)
 - TCP 长连接通信
+- WebSocket 实时通信 (Web端)
 - 自定义二进制消息协议
 - Token 会话管理
 - 房间创建/加入/离开
@@ -20,6 +22,7 @@
 - 胜负判定算法
 - 积分系统
 - 排行榜
+- Web 可视化界面
 
 ## 项目结构
 
@@ -31,7 +34,7 @@
 ├── configs/config.yaml      # 配置文件
 ├── internal/
 │   ├── config/              # 配置读取
-│   ├── handler/             # HTTP/TCP 处理器
+│   ├── handler/             # HTTP/TCP/WebSocket 处理器
 │   ├── model/               # 数据模型
 │   ├── repository/          # 数据访问层
 │   ├── router/              # HTTP 路由
@@ -39,6 +42,10 @@
 ├── pkg/
 │   ├── protocol/            # 消息协议
 │   └── redis/               # Redis 连接
+├── web/                     # Web 前端
+│   ├── index.html           # 主页面
+│   ├── style.css            # 样式文件
+│   └── app.js               # 交互逻辑
 └── scripts/init.sql         # 数据库初始化脚本
 ```
 
@@ -92,8 +99,29 @@ go run ./cmd/server
 ```
 
 服务启动后监听：
-- HTTP: `http://localhost:8080`
+- HTTP/WebSocket: `http://localhost:8080`
 - TCP: `localhost:9000`
+
+### 6. 访问 Web 界面
+
+浏览器打开 `http://localhost:8080` 即可进入游戏界面。
+
+## Web 界面使用
+
+### 功能说明
+
+1. **登录/注册**: 首页提供用户登录和注册功能
+2. **大厅**: 显示房间列表和排行榜
+3. **房间**: 创建或加入房间等待对手
+4. **对战**: 实时五子棋对战，点击棋盘落子
+
+### 测试双人对战
+
+打开两个浏览器窗口（建议使用普通窗口 + 无痕窗口）：
+
+1. 窗口A: 登录用户1，创建房间
+2. 窗口B: 登录用户2，加入房间
+3. 房间满员后自动开始游戏
 
 ## HTTP API
 
@@ -102,6 +130,8 @@ go run ./cmd/server
 | POST | /api/register | 用户注册 |
 | POST | /api/login | 用户登录 |
 | GET | /api/user/:id | 查询用户信息 |
+| GET | /ws | WebSocket 连接 |
+| GET | / | Web 界面 |
 
 ### 示例
 
@@ -162,7 +192,7 @@ curl http://localhost:8080/api/user/1
 
 ## 测试客户端
 
-项目包含一个测试客户端：
+项目包含一个命令行测试客户端：
 
 ```bash
 go run ./cmd/client
@@ -173,6 +203,7 @@ go run ./cmd/client
 - [go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
 - [go-redis/v9](https://github.com/redis/go-redis)
 - [gopkg.in/yaml.v3](https://gopkg.in/yaml.v3)
+- [gorilla/websocket](https://github.com/gorilla/websocket)
 
 ## License
 

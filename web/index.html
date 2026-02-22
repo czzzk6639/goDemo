@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋对战</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录/注册页面 -->
+        <div id="auth-page" class="page">
+            <div class="auth-container">
+                <h1>五子棋对战</h1>
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('login')">登录</button>
+                    <button class="tab" onclick="showTab('register')">注册</button>
+                </div>
+                <div id="login-form" class="form">
+                    <input type="text" id="login-username" placeholder="用户名">
+                    <input type="password" id="login-password" placeholder="密码">
+                    <button onclick="login()">登录</button>
+                </div>
+                <div id="register-form" class="form hidden">
+                    <input type="text" id="reg-username" placeholder="用户名">
+                    <input type="password" id="reg-password" placeholder="密码">
+                    <button onclick="register()">注册</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 大厅页面 -->
+        <div id="lobby-page" class="page hidden">
+            <div class="lobby-container">
+                <div class="header">
+                    <div class="user-info">
+                        <span id="username-display"></span>
+                        <span id="score-display"></span>
+                    </div>
+                    <button onclick="logout()" class="btn-secondary">退出</button>
+                </div>
+
+                <div class="lobby-content">
+                    <div class="room-section">
+                        <div class="section-header">
+                            <h2>房间列表</h2>
+                            <button onclick="createRoom()">创建房间</button>
+                        </div>
+                        <div id="room-list" class="room-list"></div>
+                    </div>
+
+                    <div class="stats-section">
+                        <h2>排行榜</h2>
+                        <div id="leaderboard" class="leaderboard"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 房间等待页面 -->
+        <div id="room-page" class="page hidden">
+            <div class="room-container">
+                <div class="room-header">
+                    <h2 id="room-name"></h2>
+                    <button onclick="leaveRoom()" class="btn-secondary">离开房间</button>
+                </div>
+                <div class="players-info">
+                    <div class="player-slot" id="player-1">
+                        <span class="player-name">等待中...</span>
+                        <span class="stone black"></span>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="player-slot" id="player-2">
+                        <span class="player-name">等待中...</span>
+                        <span class="stone white"></span>
+                    </div>
+                </div>
+                <p id="room-status">等待玩家加入...</p>
+            </div>
+        </div>
+
+        <!-- 游戏页面 -->
+        <div id="game-page" class="page hidden">
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="turn-info" id="turn-info"></div>
+                    <button onclick="forfeit()" class="btn-danger">认输</button>
+                </div>
+                <div class="game-board-container">
+                    <canvas id="game-board" width="570" height="570"></canvas>
+                </div>
+                <div class="game-info">
+                    <div id="current-turn"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏结束弹窗 -->
+        <div id="game-over-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="game-result"></h2>
+                <button onclick="backToLobby()">返回大厅</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
