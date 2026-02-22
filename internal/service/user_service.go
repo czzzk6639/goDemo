@@ -68,6 +68,18 @@ func (s *UserService) GetUserByID(id int64) (*model.User, error) {
 	return repository.GetUserByID(id)
 }
 
+func (s *UserService) UpdateScore(userID int64, scoreDelta int, isWin bool) error {
+	return repository.UpdateUserScore(userID, scoreDelta, isWin)
+}
+
+func (s *UserService) GetUserStats(userID int64) (score, winCount, loseCount int, err error) {
+	return repository.GetUserStats(userID)
+}
+
+func (s *UserService) GetUserRank(userID int64) (int, error) {
+	return repository.GetUserRank(userID)
+}
+
 func generateToken() (string, error) {
 	bytes := make([]byte, 32)
 	if _, err := rand.Read(bytes); err != nil {

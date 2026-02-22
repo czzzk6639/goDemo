@@ -3,12 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 
 	"game-server/internal/config"
+	"game-server/internal/handler"
 	"game-server/internal/repository"
 	"game-server/internal/router"
+	"game-server/pkg/redis"
 )
 
 func main() {
@@ -26,6 +29,14 @@ func main() {
 	}
 	defer repository.CloseDB()
 
+	if err := redis.InitRedis(); err != nil {
+		log.Fatalf("Failed to connect redis: %v", err)
+	}
+	defer redis.CloseRedis()
+
+	tcpHandler := handler.NewTCPHandler()
+	go startTCPServer(tcpHandler)
+
 	r := router.NewRouter()
 	mux := r.Setup()
 
@@ -34,5 +45,26 @@ func main() {
 
 	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
+	}
+}
+
+func startTCPServer(h *handler.TCPHandler) {
+	addr := fmt.Sprintf(":%d", config.GlobalConfig.Server.TCPPort)
+	listener, err := net.Listen("tcp", addr)
+	if err != nil {
+		log.Fatalf("Failed to start TCP server: %v", err)
+	}
+	defer listener.Close()
+
+	log.Printf("TCP server starting on %s", addr)
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Printf("Accept error: %v", err)
+			continue
+		}
+
+		go h.HandleConn(conn)
 	}
 }

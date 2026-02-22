@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -32,6 +33,10 @@ type RedisConfig struct {
 	Port     int    `yaml:"port"`
 	Password string `yaml:"password"`
 	DB       int    `yaml:"db"`
+}
+
+func (c *RedisConfig) Addr() string {
+	return fmt.Sprintf("%s:%d", c.Host, c.Port)
 }
 
 var GlobalConfig *Config
