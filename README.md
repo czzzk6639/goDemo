@@ -1,4 +1,4 @@
-# 五子棋游戏服务器 (Gomoku Game Server)
+# 五子棋游戏服务器
 
 一个基于 Go 语言开发的五子棋在线对战游戏服务器，支持 TCP 长连接、用户认证、房间匹配、实时对战和排行榜功能。
 
@@ -47,8 +47,8 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/yourusername/gomoku-server.git
-cd gomoku-server
+git clone https://github.com/czzzk6639/goDemo.git
+cd goDemo
 ```
 
 ### 2. 安装依赖
